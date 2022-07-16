@@ -4,21 +4,21 @@ function Home() {
   return (
     <div>
       {/* BANNER */}
-      <div className="bg-green-200 h-[420px] flex justify-center items-center">
+      <div className="bg-[url('../public/food.jpg')] bg-bottom bg-no-repeat bg-cover h-[450px] flex justify-center items-center">
         <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-bold py-5">
-            Search for your faviourate restaurant
+          <h2 className="text-5xl text-white font-black py-8">
+            Food Delivery in Hargeisa
           </h2>
           <div className="flex">
-            <div className="flex items-center bg-white p-2">
+            <div className="flex items-center bg-white p-3">
               <FaSearch size={20} className="mr-3" />
               <input
                 type="text"
                 placeholder="Search ...."
-                className="outline-none"
+                className="outline-none w-96"
               />
             </div>
-            <button className="bg-black text-white text-xs font-bold px-5">
+            <button className="bg-black text-white text-sm font-bold px-5">
               Search
             </button>
           </div>
