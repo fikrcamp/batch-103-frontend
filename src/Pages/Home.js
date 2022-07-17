@@ -35,8 +35,10 @@ function Home() {
           </div>
         </div>
         <div className="grid grid-cols-2 py-2 gap-4">
-          <RestaurantCard />
-          <RestaurantCard />
+          <RestaurantCard name={"Sultan"} />
+          <RestaurantCard name={"Fish and steak"} />
+          <RestaurantCard name={"25"} />
+          <RestaurantCard name={"Mocha"} />
         </div>
       </div>
       {/* REST LIST */}

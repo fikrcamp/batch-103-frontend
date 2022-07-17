@@ -15,3 +15,7 @@ body {
 .btn-dark {
   @apply bg-black px-5 py-3 rounded-full text-sm font-medium text-white;
 }
+
+.input {
+  @apply px-3 py-2 rounded-sm bg-gray-100 text-sm;
+}
