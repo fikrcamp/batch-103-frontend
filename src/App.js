@@ -4,6 +4,7 @@ import Signup from "./Pages/Signup";
 import Header from "./Components/Header";
 import Restaurant from "./Pages/Restaurant";
 import Order from "./Pages/Order";
+import List from "./Pages/List";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/restaurant" element={<Restaurant />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/list" element={<List />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
       <ToastContainer

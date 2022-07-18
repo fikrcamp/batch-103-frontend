@@ -7,10 +7,10 @@ function Header() {
         <img src="./logo.png" alt="logo" className="h-4" />
       </div>
       <div className="space-x-3">
-        <Link to="/home" className="text-sm">
+        <Link to="/" className="text-sm">
           Home
         </Link>
-        <Link to="/home" className="text-sm">
+        <Link to="/list" className="text-sm">
           List
         </Link>
         <Link to="/home" className="text-sm">
