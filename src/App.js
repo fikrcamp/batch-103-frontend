@@ -11,6 +11,7 @@ import OrderList from "./Pages/Admin/Order";
 import Menu from "./Pages/Admin/Menu";
 import MenuForm from "./Pages/Admin/MenuForm";
 import Profile from "./Pages/Admin/Profile";
+import NotFound from "./Pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/admin/menu/new" element={<MenuForm />} />
         <Route path="/admin/menu" element={<Menu />} />
         <Route path="/admin/profile" element={<Profile />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer
         position="top-right"
