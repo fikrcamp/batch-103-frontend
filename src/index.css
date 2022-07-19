@@ -19,3 +19,10 @@ body {
 .input {
   @apply px-3 py-2 rounded-sm bg-gray-100 text-sm;
 }
+
+table,
+tr,
+th,
+td {
+  @apply border border-gray-400 py-1 px-4;
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 function Signup() {
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
@@ -53,6 +53,14 @@ function Signup() {
         <button className="btn-dark" onClick={handleOnSubmit}>
           Sign Up
         </button>
+        <div>
+          <p className="text-sm text-gray-500 p-4">
+            Already have an account?{" "}
+            <Link to="/login" className="font-bold">
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

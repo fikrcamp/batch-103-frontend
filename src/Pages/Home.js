@@ -1,5 +1,6 @@
 import { FaSearch, FaAngleRight } from "react-icons/fa";
 import RestaurantCard from "../Components/RestaurantCard";
+import { Link } from "react-router-dom";
 function Home() {
   return (
     <div>
@@ -30,7 +31,9 @@ function Home() {
         <div className="flex justify-between">
           <h2 className="font-bold text-2xl">Restaurants Near You</h2>
           <div className="flex items-center">
-            <h2 className="font-bold text-sm">View All</h2>
+            <Link to="/list">
+              <h2 className="font-bold text-sm">View All</h2>
+            </Link>
             <FaAngleRight size={20} className="text-green-400" />
           </div>
         </div>
