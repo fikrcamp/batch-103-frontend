@@ -2,6 +2,7 @@ import { FaSearch, FaAngleRight } from "react-icons/fa";
 import RestaurantCard from "../Components/RestaurantCard";
 import { Link } from "react-router-dom";
 function Home() {
+  
   return (
     <div>
       {/* BANNER */}

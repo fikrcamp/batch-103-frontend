@@ -2,14 +2,19 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../Utils/UserContext";
 function Signup() {
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   async function handleOnSubmit() {
     try {
       const res = await axios.post("http://localhost:8000/user/", inputs);
       toast.success(res.data.message);
-      navigate("/home");
+      localStorage.setItem("token", res.data.token);
+      setUser(true);
+      navigate("/");
     } catch (e) {
       toast.error(e.response.data.message);
     }
@@ -35,6 +40,13 @@ function Signup() {
             className="px-3 py-2 rounded-sm bg-gray-100 text-sm"
             onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
           />
+          <select
+            className="px-3 py-2 rounded-sm bg-gray-100 text-sm"
+            onChange={(e) => setInputs({ ...inputs, role: e.target.value })}
+          >
+            <option value="user">User</option>
+            <option value="owner">Restaurant Owner</option>
+          </select>
           <input
             type="password"
             placeholder="Password"

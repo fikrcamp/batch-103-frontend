@@ -5,8 +5,18 @@ import {
   MdOutlineReceipt,
   MdLogout,
 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../Utils/UserContext";
+
 function AdminNav() {
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setUser(false);
+    navigate("/login");
+  }
   return (
     <div className="flex justify-center space-x-2 my-5">
       <Link to="/admin/profile">
@@ -29,7 +39,7 @@ function AdminNav() {
           <MdOutlineReceipt color="white" size="25" />
         </div>
       </Link>
-      <div className="bg-black p-5 rounded-full">
+      <div className="bg-black p-5 rounded-full" onClick={handleLogout}>
         <MdLogout color="white" size="25" />
       </div>
     </div>

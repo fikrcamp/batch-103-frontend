@@ -12,39 +12,68 @@ import Menu from "./Pages/Admin/Menu";
 import MenuForm from "./Pages/Admin/MenuForm";
 import Profile from "./Pages/Admin/Profile";
 import NotFound from "./Pages/NotFound";
+import Protect from "./Protect";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useState, useEffect } from "react";
+import { UserContext } from "./Utils/UserContext";
+import axios from "axios";
 function App() {
+  const [user, setUser] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get("http://localhost:8000/user/check", {
+        headers: { authentication: token },
+      })
+      .then(() => {
+        setUser(true);
+      })
+      .catch((e) => {
+        setUser(false);
+      });
+
+    setLoading(false);
+  }, []);
+
+  if (loading) return <h1>Loading ....</h1>;
+
   return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/restaurant" element={<Restaurant />} />
-        <Route path="/order" element={<Order />} />
-        <Route path="/list" element={<List />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin/restaurant" element={<RestaurantDetails />} />
-        <Route path="/admin/order" element={<OrderList />} />
-        <Route path="/admin/menu/new" element={<MenuForm />} />
-        <Route path="/admin/menu" element={<Menu />} />
-        <Route path="/admin/profile" element={<Profile />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </BrowserRouter>
+    <UserContext.Provider value={{ user, setUser }}>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/restaurant" element={<Restaurant />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/list" element={<List />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+
+          <Route path="/admin" element={<Protect />}>
+            <Route path="restaurant" element={<RestaurantDetails />} />
+            <Route path="order" element={<OrderList />} />
+            <Route path="menu/new" element={<MenuForm />} />
+            <Route path="menu" element={<Menu />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 
