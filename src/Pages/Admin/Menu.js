@@ -1,7 +1,26 @@
 import AdminNav from "../../Components/AdminNav";
 import { MdModeEdit, MdOutlineRemoveCircle } from "react-icons/md";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 function Menu() {
+  const [menuItems, setMenuItems] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/menu")
+      .then((res) => setMenuItems(res.data.items));
+  });
+
+  async function removeMenuItem(id) {
+    try {
+      await axios.delete(`http://localhost:8000/menu/${id}`);
+      toast.success("Item deleted");
+    } catch (e) {
+      toast.error("Error");
+    }
+  }
+
   return (
     <div>
       <AdminNav />
@@ -21,23 +40,29 @@ function Menu() {
                 <th>Edit</th>
                 <th>Delete</th>
               </tr>
-              <tr>
-                <td>
-                  <img
-                    src="https://img.freepik.com/premium-photo/big-hamburger-with-double-beef-french-fries_252907-8.jpg?w=2000"
-                    alt="food"
-                    className="h-16"
-                  />
-                </td>
-                <td>Mexican Pizza</td>
-                <td>$12.4</td>
-                <td>
-                  <MdModeEdit className="text-blue-400 m-auto" />
-                </td>
-                <td>
-                  <MdOutlineRemoveCircle color="red" className="m-auto" />
-                </td>
-              </tr>
+              {menuItems.map((item) => (
+                <tr>
+                  <td>
+                    <img
+                      src={`http://localhost:8000/${item.image}`}
+                      alt="food"
+                      className="h-16"
+                    />
+                  </td>
+                  <td>{item.name}</td>
+                  <td>${item.price}</td>
+                  <td>
+                    <MdModeEdit className="text-blue-400 m-auto" />
+                  </td>
+                  <td>
+                    <MdOutlineRemoveCircle
+                      color="red"
+                      className="m-auto"
+                      onClick={() => removeMenuItem(item._id)}
+                    />
+                  </td>
+                </tr>
+              ))}
             </table>
           </div>
         </div>

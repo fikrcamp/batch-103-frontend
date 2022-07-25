@@ -1,8 +1,72 @@
 import MenuCard from "../Components/MenuCard";
 import { FiShoppingCart } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import OrderCard from "../Components/OrderCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cart from "../Components/Cart";
 function Restaurant() {
+  const { id } = useParams();
+  const [restaurant, setRestaurant] = useState({});
+  const [menu, setMenu] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    axios.get(`http://localhost:8000/restaurant/${id}`).then((res) => {
+      setRestaurant(res.data.restaurant);
+      setMenu(res.data.menu);
+    });
+  });
+  function addToCart(item) {
+    //if item already in cart   qty++
+
+    //else
+    const index = cart.findIndex((cartItem) => cartItem.id === item._id);
+
+    if (index >= 0) {
+      const newCart = cart;
+      newCart[index].qty = newCart[index].qty + 1;
+      setCart(newCart);
+    } else {
+      setCart([
+        ...cart,
+        {
+          id: item._id,
+          name: item.name,
+          image: item.image,
+          qty: 1,
+          price: item.price,
+        },
+      ]);
+    }
+
+    setTotal(total + item.price);
+  }
+
+  function removeFromCart(item) {
+    const found = cart.find((cartItem) => cartItem.id === item._id);
+    const index = cart.findIndex((cartItem) => cartItem.id === item._id);
+    if (found.qty === 1) {
+      //remove
+      const newCart = cart.filter((cartItem) => cartItem.id !== item._id);
+      setCart(newCart);
+    } else {
+      const newCart = cart;
+      newCart[index].qty = newCart[index].qty - 1;
+      setCart(newCart);
+    }
+    setTotal(total - item.price);
+  }
+
+  function removeFullItem(item) {
+    const newCart = cart.filter((cartItem) => cartItem.id !== item.id);
+    const itemTotal = item.price * item.qty;
+
+    setTotal(total - itemTotal);
+    setCart(newCart);
+  }
+
   return (
     <div className="p-10">
       <div className="grid grid-cols-4 gap-3">
@@ -14,12 +78,12 @@ function Restaurant() {
           {/* RESTAURANT INFO */}
           <div className="flex">
             <img
-              src="https://img.freepik.com/premium-photo/big-hamburger-with-double-beef-french-fries_252907-8.jpg?w=2000"
+              src={`http://localhost:8000/${restaurant.image}`}
               alt="food"
               className="h-28 w-28 rounded-full bg-black p-1 -mt-10 ml-5"
             />
             <div className="pl-2">
-              <h2 className="text-2xl font-bold">Sultan</h2>
+              <h2 className="text-2xl font-bold">{restaurant.name}</h2>
               <p className="text-sm text-gray-400">
                 Arabian | Somali | Turkish
               </p>
@@ -27,58 +91,21 @@ function Restaurant() {
           </div>
           {/* RESTAURANT INFO */}
           <div className="p-5">
-            <p>The description about restaurant</p>
+            <p>{restaurant.description}</p>
           </div>
         </div>
         {/* RESTAURANT CARD */}
         {/* CART CARD */}
-        <div className="bg-white rounded-md p-5 h-fit row-span-2 drop-shadow-md">
-          <div className="flex items-center justify-between">
-            <h2 className="font-bold text-xl">Cart</h2>
-            <FiShoppingCart size={20} />
-          </div>
-          <div className="py-5 space-y-2">
-            {/* CART ITEM */}
-            <OrderCard />
-            <OrderCard />
-            <OrderCard />
-            <OrderCard />
-            {/* CART ITEM */}
-            {/* CART TOTAL */}
-            <div className="border-t mt-4">
-              <div className="flex align-items justify-between py-1">
-                <h2 className="font-bold">Total</h2>
-                <h2>$14</h2>
-              </div>
-              <div className="flex align-items justify-between py-1">
-                <h2 className="font-bold">Delivery</h2>
-                <h2>$2</h2>
-              </div>
-              <div className="flex align-items justify-between py-1">
-                <h2 className="font-bold">Sub Total</h2>
-                <h2>$16</h2>
-              </div>
-              <Link to="/order">
-                <button className="bg-green-400 w-full rounded-md text-white font-bold p-3 my-2">
-                  Place Order
-                </button>
-              </Link>
-            </div>
-            {/* CART TOTAL */}
-          </div>
-        </div>
+        <Cart cart={cart} total={total} remove={removeFullItem} />
         {/* CART CARD */}
 
         {/* MENU CARD */}
         <div className="bg-white col-span-3 p-5">
           <h3 className="text-lg font-bold">MENU ITEMS</h3>
           <div className="grid grid-cols-2 gap-3 py-4">
-            <MenuCard />
-            <MenuCard />
-            <MenuCard />
-            <MenuCard />
-            <MenuCard />
-            <MenuCard />
+            {menu.map((item) => (
+              <MenuCard item={item} add={addToCart} remove={removeFromCart} />
+            ))}
           </div>
         </div>
         {/* MENU CARD */}
