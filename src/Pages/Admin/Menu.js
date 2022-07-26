@@ -7,8 +7,9 @@ import { toast } from "react-toastify";
 function Menu() {
   const [menuItems, setMenuItems] = useState([]);
   useEffect(() => {
+    const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:8000/menu")
+      .get("http://localhost:8000/menu", { headers: { authentication: token } })
       .then((res) => setMenuItems(res.data.items));
   });
 
@@ -52,7 +53,9 @@ function Menu() {
                   <td>{item.name}</td>
                   <td>${item.price}</td>
                   <td>
-                    <MdModeEdit className="text-blue-400 m-auto" />
+                    <Link to={`/admin/menu/edit/${item._id}`}>
+                      <MdModeEdit className="text-blue-400 m-auto" />
+                    </Link>
                   </td>
                   <td>
                     <MdOutlineRemoveCircle

@@ -23,16 +23,9 @@ function App() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios
-      .get("http://localhost:8000/user/check", {
-        headers: { authentication: token },
-      })
-      .then(() => {
-        setUser(true);
-      })
-      .catch((e) => {
-        setUser(false);
-      });
+    if (token) {
+      setUser(true);
+    }
 
     setLoading(false);
   }, []);
@@ -55,6 +48,7 @@ function App() {
             <Route path="restaurant" element={<RestaurantDetails />} />
             <Route path="order" element={<OrderList />} />
             <Route path="menu/new" element={<MenuForm />} />
+            <Route path="menu/edit/:id" element={<MenuForm />} />
             <Route path="menu" element={<Menu />} />
             <Route path="profile" element={<Profile />} />
           </Route>

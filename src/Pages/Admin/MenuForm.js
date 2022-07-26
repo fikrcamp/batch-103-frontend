@@ -1,12 +1,20 @@
 import AdminNav from "../../Components/AdminNav";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function MenuForm() {
-  const [inputs, setInputs] = useState();
+  const { id } = useParams();
+  const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/menu/${id}`)
+      .then((res) => setInputs(res.data.menu));
+  }, []);
+
   async function handleOnSubmit() {
     const token = localStorage.getItem("token");
 
@@ -27,6 +35,21 @@ function MenuForm() {
     }
   }
 
+  function handleOnEdit() {
+    const formData = new FormData();
+    formData.append("name", inputs.name);
+    formData.append("price", inputs.price);
+    formData.append("description", inputs.description);
+    formData.append("category", inputs.category);
+    formData.append("image", inputs.image);
+    try {
+      axios.put(`http://localhost:8000/menu/${id}`, formData);
+      toast.success("edited menu item");
+      navigate("/admin/menu");
+    } catch (e) {
+      toast.error("Error");
+    }
+  }
   return (
     <div>
       <AdminNav />
@@ -39,12 +62,14 @@ function MenuForm() {
                 type="text"
                 className="input w-full"
                 placeholder="Menu Item"
+                value={inputs.name}
                 onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
               />
               <input
                 type="text"
                 className="input w-full"
                 placeholder="Price"
+                value={inputs.price}
                 onChange={(e) =>
                   setInputs({ ...inputs, price: e.target.value })
                 }
@@ -53,6 +78,7 @@ function MenuForm() {
             <textarea
               className="input w-full"
               placeholder="Menu Description"
+              value={inputs.description}
               onChange={(e) =>
                 setInputs({ ...inputs, description: e.target.value })
               }
@@ -60,6 +86,7 @@ function MenuForm() {
 
             <select
               className="input w-full"
+              value={inputs.category}
               onChange={(e) =>
                 setInputs({ ...inputs, category: e.target.value })
               }
@@ -78,9 +105,15 @@ function MenuForm() {
               }
             />
             <div className="flex justify-center">
-              <button className="btn-dark" onClick={handleOnSubmit}>
-                Submit
-              </button>
+              {id ? (
+                <button className="btn-dark" onClick={handleOnEdit}>
+                  Edit
+                </button>
+              ) : (
+                <button className="btn-dark" onClick={handleOnSubmit}>
+                  Submit
+                </button>
+              )}
             </div>
           </div>
         </div>

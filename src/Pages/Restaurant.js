@@ -67,6 +67,11 @@ function Restaurant() {
     setCart(newCart);
   }
 
+  function emptyCart() {
+    setCart([]);
+    setTotal(0);
+  }
+
   return (
     <div className="p-10">
       <div className="grid grid-cols-4 gap-3">
@@ -96,7 +101,12 @@ function Restaurant() {
         </div>
         {/* RESTAURANT CARD */}
         {/* CART CARD */}
-        <Cart cart={cart} total={total} remove={removeFullItem} />
+        <Cart
+          cart={cart}
+          total={total}
+          remove={removeFullItem}
+          empty={emptyCart}
+        />
         {/* CART CARD */}
 
         {/* MENU CARD */}
